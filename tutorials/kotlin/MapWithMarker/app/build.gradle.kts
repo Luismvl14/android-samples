@@ -1,4 +1,6 @@
-/*
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+ 
+ /*
  * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,6 +53,12 @@ android {
     namespace = "com.example.mapwithmarker"
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
+}
+
 dependencies {
     implementation(libs.coreKtx)
     implementation(libs.kotlinStdlib)
@@ -65,7 +73,7 @@ dependencies {
 
 secrets {
     // To add your Maps API key to this project:
-    // 1. If the secrets.properties file does not exist, create it in the same folder as the local.properties file.
+    // 1. If the secrets.properties file does not exist, create it in the root directory (the same folder as the root local.properties file).
     // 2. Add this line, where YOUR_API_KEY is your API key:
     //        MAPS_API_KEY=YOUR_API_KEY
     propertiesFileName = "secrets.properties"

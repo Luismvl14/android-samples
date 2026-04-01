@@ -17,10 +17,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
  */
 
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-parcelize")
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.secrets.gradle.plugin)
 }
 
 android {
@@ -31,13 +31,14 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "1.16.0"
+        versionName = libs.versions.versionName.get()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
     }
 
     buildFeatures {
         buildConfig = true
+        viewBinding = true
     }
 
     buildTypes {
@@ -53,33 +54,37 @@ android {
     flavorDimensions.add("version")
 
     lint {
-        abortOnError = false
+        disable += setOf("MissingInflatedId")
+        sarifOutput = layout.buildDirectory.file("reports/lint-results-debug.sarif").get().asFile
     }
 
     namespace = "com.example.kotlindemos"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_21)
-    }
-    jvmToolchain(21) // Specify the JVM toolchain version
-    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
         freeCompilerArgs.add("-Xopt-in=kotlin.RequiresOptIn")
     }
 }
 
 dependencies {
     implementation(libs.appcompat)
-    implementation(libs.kotlinStdlib)
+    implementation(libs.kotlin.stdlib)
     implementation(libs.cardview)
     implementation(libs.recyclerview)
     implementation(libs.multidex)
     implementation(libs.volley)
     implementation(libs.material)
 
-    implementation(libs.lifecycleRuntimeKtx)
-    implementation(libs.mapsKtx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.maps.ktx)
+    implementation(libs.maps.utils.ktx)
 
     implementation(libs.activity)
 
@@ -89,15 +94,16 @@ dependencies {
 
     // Tests
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidxJunit)
-    androidTestImplementation(libs.espressoCore)
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.truth)
 
-    implementation(project(":common-ui"))
+    implementation(project(":ApiDemos:common-ui"))
 }
 
 secrets {
     // To add your Maps API key to this project:
-    // 1. If the secrets.properties file does not exist, create it in the same folder as the local.properties file.
+    // 1. If the secrets.properties file does not exist, create it in the root directory (the same folder as the root local.properties file).
     // 2. Add this line, where YOUR_API_KEY is your API key:
     //        MAPS_API_KEY=YOUR_API_KEY
     propertiesFileName = "secrets.properties"

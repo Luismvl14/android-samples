@@ -15,9 +15,9 @@
  */
 
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
     id("project-report")
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    alias(libs.plugins.secrets.gradle.plugin)
 }
 
 android {
@@ -28,13 +28,15 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "1.16.0"
+        versionName = libs.versions.versionName.get()
         multiDexEnabled = true
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {
         compose = true
         buildConfig = true
+        viewBinding = true
     }
 
     buildTypes {
@@ -55,27 +57,36 @@ android {
     }
 
     namespace = "com.example.mapdemo"
+
+    lint {
+        disable += setOf("MissingInflatedId")
+        sarifOutput = layout.buildDirectory.file("reports/lint-results-debug.sarif").get().asFile
+    }
 }
 
 dependencies {
     implementation(libs.appcompat)
     implementation(libs.recyclerview)
     implementation(libs.volley)
-    implementation(libs.playServicesMaps)
+    implementation(libs.play.services.maps)
     implementation(libs.material)
     implementation(libs.activity)
+    implementation(project(":ApiDemos:common-ui"))
+    implementation(libs.uiautomator)
+    implementation(libs.maps.utils.ktx)
 
     // Tests
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidxJunit)
-    androidTestImplementation(libs.espressoCore)
-
-    implementation(project(":common-ui"))
+    androidTestImplementation(libs.espresso.idling.resource)
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.truth)
+    androidTestImplementation(libs.ext.junit)
 }
 
 secrets {
     // To add your Maps API key to this project:
-    // 1. If the secrets.properties file does not exist, create it in the same folder as the local.properties file.
+    // 1. If the secrets.properties file does not exist, create it in the root directory (the same folder as the root local.properties file).
     // 2. Add this line, where YOUR_API_KEY is your API key:
     //        MAPS_API_KEY=YOUR_API_KEY
     propertiesFileName = "secrets.properties"

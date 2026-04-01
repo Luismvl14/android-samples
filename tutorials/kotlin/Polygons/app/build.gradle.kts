@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 /*
  * Copyright 2024 Google LLC
  *
@@ -51,21 +53,27 @@ android {
     namespace = "com.example.polygons"
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
+}
+
 dependencies {
     implementation(libs.appcompat)
-    implementation(libs.playServicesMaps)
-    implementation(libs.coreKtx)
-    implementation(libs.kotlinStdlib)
+    implementation(libs.play.services.maps)
+    implementation(libs.core.ktx)
+    implementation(libs.kotlin.stdlib)
 
     // Tests
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidxTestExtJunit)
-    androidTestImplementation(libs.espressoCore)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 }
 
 secrets {
     // To add your Maps API key to this project:
-    // 1. If the secrets.properties file does not exist, create it in the same folder as the local.properties file.
+    // 1. If the secrets.properties file does not exist, create it in the root directory (the same folder as the root local.properties file).
     // 2. Add this line, where YOUR_API_KEY is your API key:
     //        MAPS_API_KEY=YOUR_API_KEY
     propertiesFileName = "secrets.properties"

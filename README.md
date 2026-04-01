@@ -7,24 +7,25 @@
 
 # Google Maps SDK for Android Samples
 
-<img src="images/screenshots.png" width="1024" />
+<img src="images/screenshots.png" width="1164" />
 
 ## Description
 
 Samples demonstrating how to use
-[Maps SDK for Android](https://developers.google.com/maps/documentation/android/).
+[Maps SDK for Android](https://developers.google.com/maps/documentation/android-sdk).
 
 ## Samples in this repo (if more than one)
 
 This repo contains the following samples:
 
 1. [ApiDemos](ApiDemos): A collection of small demos showing most features of the Maps SDK for Android.
-1. [WearOS](WearOS):
+2. [FireMarkers](FireMarkers): Demonstrates how to use Firebase Realtime Database to drive synchronized, live animations on a Google Map across multiple devices using a controller/agent architecture.
+3. [WearOS](WearOS):
 Displays a map on a Wear OS device. This sample demonstrates the basic
 setup required for a gradle-based Android Studio project.
-1. [Tutorials](https://github.com/googlemaps/android-samples/tree/main/tutorials): Samples
+4. [Tutorials](https://github.com/googlemaps/android-samples/tree/main/tutorials): Samples
 associated with tutorials in the developer's guide. See each sample for a link to the associated guide.
-1. [Snippets](snippets): Snippets for code found in https://developers.google.com/maps/documentation/android-sdk
+5. [Snippets](snippets): Snippets for code found in https://developers.google.com/maps/documentation/android-sdk
 
 ## Requirements
 
@@ -40,7 +41,25 @@ To run the samples, you will need:
 
 1. Download the samples by cloning this repository
 1. In the welcome screen of Android Studio, select "Open an Existing project"
-1. Select one of the sample directories from this repository
+1. Select the root directory of this repository (android-samples)
+
+## Verifying the build
+
+To verify that all samples build and pass tests, run:
+
+```bash
+./scripts/verify_all.sh
+```
+
+To run instrumentation tests on a connected device or emulator, use:
+
+```bash
+# For Wear OS devices/emulators
+./scripts/verify_all.sh --connected-wear
+
+# For Mobile (Handheld) devices/emulators
+./scripts/verify_all.sh --connected-mobile
+```
 
 Alternatively, use the `gradlew build` command to build the project directly or download an APK
 under [releases](https://github.com/googlemaps/android-samples/releases).

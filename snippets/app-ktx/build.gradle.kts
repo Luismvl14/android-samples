@@ -16,7 +16,7 @@
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.secrets.gradle.plugin)
 }
 
@@ -28,7 +28,7 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "1.0"
+        versionName = libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -52,6 +52,11 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    lint {
+        disable += setOf("MissingInflatedId")
+        sarifOutput = layout.buildDirectory.file("reports/lint-results-debug.sarif").get().asFile
     }
     kotlin {
         compilerOptions {
@@ -82,7 +87,7 @@ dependencies {
 
 secrets {
     // To add your Maps API key to this project:
-    // 1. If the secrets.properties file does not exist, create it in the same folder as the local.properties file.
+    // 1. If the secrets.properties file does not exist, create it in the root directory (the same folder as the root local.properties file).
     // 2. Add this line, where YOUR_API_KEY is your API key:
     //        MAPS_API_KEY=YOUR_API_KEY
     propertiesFileName = "secrets.properties"
